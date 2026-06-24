@@ -1028,7 +1028,7 @@ select.ein{cursor:pointer}
 <script>
 
 
-var FB_CONFIG={apiKey:'AIzaSyAbCWguTxQLrQO4PPPgAQvzJB-SRaP5cnk',authDomain:'arion-bot-2d4e9.firebaseapp.com',projectId:'arion-bot-2d4e9',databaseURL:'https://arion-bot-2d4e9-default-rtdb.asia-southeast1.firebasedatabase.app',messagingSenderId:'REPLACE_WITH_SENDER_ID',appId:'REPLACE_WITH_APP_ID'};
+var FB_CONFIG={apiKey:'AIzaSyAbCWguTxQLrQO4PPPgAQvzJB-SRaP5cnk',authDomain:'arion-bot-2d4e9.firebaseapp.com',projectId:'arion-bot-2d4e9',databaseURL:'https://arion-bot-2d4e9-default-rtdb.asia-southeast1.firebasedatabase.app',messagingSenderId:'184799044118',appId:'1:184799044118:web:269c6f5ddbc5a22593cb37'};
 /* TODO: Firebase Console > Project Settings > Cloud Messaging > Web Push > VAPID Key */
 var PUSH_VAPID_KEY='BEwtmB_EuehEoescQv_dlMsq9j2Gb_2kAxMAj_183w7r3__RZ2B_dC8zW7BI7Mf5MwmsOso7uw1hhXhTEakSEbk';
 var fbDb=null,fbReady=false,leadsRef=null;
@@ -1538,14 +1538,8 @@ var SESSION_ID='s_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8
    Service Worker registration, FCM subscription, 3 triggers
    =========================================================== */
 /* GAS se SW serve hoga — same origin = background notifications kaam karengi */
-var PUSH_SW_PATH=(function(){
-  /* GAS environment mein google.script.env.deploymentUrl se URL milta hai */
-  /* Fallback: window.location.href se base URL nikalte hain */
-  try{
-    var base=window.location.href.split('?')[0].split('#')[0];
-    return base+'?file=sw';
-  }catch(e){return 'sw.js';}
-})();
+/* SW path — GitHub Pages pe hosted hai */
+var PUSH_SW_PATH='https://jitendramis.github.io/arion-panel/sw.js';
 var pushReady=false;
 var pushLastLead={};
 
@@ -4041,7 +4035,7 @@ function ptRunDiagnostics(){
   var vk=PUSH_VAPID_KEY||'';
   if(!vk||vk.indexOf('REPLACE')>-1){
     allOk=false;
-    ptSet(5,'✗','fail','VAPID Key','HTML mein REPLACE_WITH_YOUR_VAPID_KEY placeholder hai — Firebase Console > Cloud Messaging > Web Push Certificates > Generate','MISSING','fail');
+    ptSet(5,'✗','fail','VAPID Key','VAPID key set nahi hai — Firebase Console > Cloud Messaging > Web Push Certificates > Generate','MISSING','fail');
   } else if(vk.length<20){
     allOk=false;
     ptSet(5,'✗','fail','VAPID Key','Key bahut chhoti hai ('+vk.length+' chars) — sahi key daalo','INVALID','fail');
