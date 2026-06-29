@@ -1827,25 +1827,27 @@ function beep(freq,dur,vol,delay){
     }catch(e){}
   },delay||0);
 }
-function sirenWail(durSec){
+/* Normal pleasant reminder ringtone — a soft 3-note chime that repeats twice.
+   Replaces the old harsh siren. Gentle, like a phone notification. */
+function reminderChime(){
   if(!audioCtx)return;
   try{
     if(audioCtx.state==='suspended')audioCtx.resume();
-    var o=audioCtx.createOscillator(),g=audioCtx.createGain(),t=audioCtx.currentTime;
-    o.type='sine';g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.20,t+0.08);
-    var n=Math.ceil(durSec/0.8),i;
-    for(i=0;i<n;i++){
-      o.frequency.setValueAtTime(420,t+i*0.8);
-      o.frequency.linearRampToValueAtTime(880,t+i*0.8+0.4);
-      o.frequency.linearRampToValueAtTime(420,t+i*0.8+0.8);
+    /* Two gentle rounds of a rising 3-note chime (C6 -> E6 -> G6) */
+    var notes=[1047,1319,1568]; /* C6, E6, G6 */
+    var round,k,delay=0;
+    for(round=0;round<2;round++){
+      for(k=0;k<notes.length;k++){
+        beep(notes[k],0.18,0.12,delay);
+        delay+=150;
+      }
+      delay+=350; /* gap between the two rounds */
     }
-    g.gain.setValueAtTime(0.20,t+durSec-0.15);g.gain.exponentialRampToValueAtTime(0.0008,t+durSec);
-    o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+durSec+0.05);
   }catch(e){}
 }
 function slaSound(level){
-  if(level>=1){sirenWail(5);return;}
-  beep(784,0.13,0.15,0);beep(587,0.18,0.15,180);
+  /* Always play the normal pleasant chime (no harsh siren) */
+  reminderChime();
 }
 function leadArrivalTs(l){
   var s=l.dateTime||l.createdAt;
@@ -2266,22 +2268,16 @@ function snakeInject(id){
   card.appendChild(svg);
 }
 function startSiren(id){
+  /* Normal reminder: just a gentle bell shake on the bell icon.
+     No red screen flash, no snake animation (kept it calm/normal). */
   slaRinging[id]=true;
-  var ov=$('sirenOv');if(ov)ov.className='sirenov';
-  var t=$('rsidetoggle'),o=$('rsideOpen'),hb=$('hBell');if(t)t.classList.add('siren');if(o)o.classList.add('siren');if(hb)hb.classList.add('siren');
+  ringBell();
   renderRside(pendingList());
-  setTimeout(function(){snakeInject(id);},60);
-  /* screen glow + bell siren stop after 20s — snake keeps going until user clicks */
   if(slaSirenTimers[id])clearTimeout(slaSirenTimers[id]);
   slaSirenTimers[id]=setTimeout(function(){
     delete slaSirenTimers[id];
-    if(ov)ov.className='';
-    /* only remove bell siren if no OTHER lead is still newly ringing */
-    var stillNew=Object.keys(slaRinging).filter(function(k){return slaSirenTimers[k];}).length;
-    if(!stillNew){if(t)t.classList.remove('siren');if(o)o.classList.remove('siren');if(hb)hb.classList.remove('siren');}
-    /* snake stays — slaRinging[id] stays true until user clicks */
     renderRside(pendingList());
-  },20000);
+  },4000);
 }
 function ndvPauseSiren(id){
   /* NDV open hone pe siren/snake visual temporarily rokta hai — lead pending rehti hai */
@@ -2315,8 +2311,9 @@ function slaScan(){
   if(slaInit){
     for(i=0;i<LEADS.length;i++){var l=LEADS[i];
       if(!prevLeadKeys[l.id]&&isPending(l)&&leadAgeMin(l)<120){
+        /* New lead: show toast + push notification, but NO alarm sound
+           (alarm only rings for Admin-set reminders) */
         showToast('\ud83d\udd14 New lead received',l.id+' \u00b7 '+(l.name||'')+(l.company?(' \u00b7 '+l.company):''),false);
-        ringBell();beep(784,0.13,0.15,0);beep(587,0.18,0.15,180);
         pushNewLead(l);
       }
     }
@@ -2338,13 +2335,8 @@ function slaCheck(){
       var lid=l.id;fbDb.ref('/leads/'+lid+'/customReminderAt').remove().catch(noop);delete l.customReminderAt;
       return;
     }
-    var last=l._lastReminderAt||slaAlerted[l.id]||0;
-    if(Date.now()-last>=900000){
-      l._lastReminderAt=Date.now();slaAlerted[l.id]=Date.now();
-      ringBell();slaSound(1);startSiren(l.id);
-      showToast('\ud83d\udea8 Pending Lead Reminder',l.id+' \u00b7 '+(l.name||'')+' \u2014 attend now!',true);
-      pushSlaAlert(l);
-    }
+    /* SLA 15-min auto reminder REMOVED — branch panel no longer auto-alarms.
+       Only Admin-set reminders (customReminderAt above) ring the alarm. */
   });
   var ids={};pend.forEach(function(l){ids[l.id]=1;});
   for(var id in slaAlerted){if(!ids[id]){delete slaAlerted[id];if(slaSirenTimers[id]){clearTimeout(slaSirenTimers[id]);delete slaSirenTimers[id];}delete slaRinging[id];}}
