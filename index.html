@@ -1682,7 +1682,7 @@ function showLocalNotif(title,body,leadId,type){
   if(Notification.permission!=='granted')return;
   var now=Date.now();
   if(type==='new_lead'){if(pushLastLead[leadId]&&now-pushLastLead[leadId]<300000)return;pushLastLead[leadId]=now;}
-  var n=new Notification(title,{body:body,icon:'/arion-icon.png',tag:leadId||type,renotify:type==='reminder',requireInteraction:true});
+  var n=new Notification(title,{body:body,icon:'/arion-icon.png',tag:leadId||type,renotify:type==='reminder',requireInteraction:true,silent:true});
   n.onclick=function(){
     window.focus();
     if(leadId){var l=leadById(leadId);if(l){state.selectedId=leadId;switchNav(caseOf(l),'real');}}
@@ -2003,6 +2003,7 @@ function renderRside(pend){
   if(rsQuery&&!searchFiltered.length){list.innerHTML='<div class="rsempty">"\u200b'+esc(rsQuery)+'" no leads found.</div>';return;}
   if(anyRsFilter()&&!filtered.length){list.innerHTML='<div class="rsempty">No pending leads match this filter.</div>';return;}
   if(rsQuery){
+    searchFiltered.sort(function(a,b){return leadArrivalTs(b)-leadArrivalTs(a);});
     var h='<div class="rssec"><span class="rssec-lbl" style="color:var(--blue)">\ud83d\udd0d Results</span><span class="rssec-ct">'+searchFiltered.length+'</span></div>';
     for(var i=0;i<searchFiltered.length;i++)h+=cardHtml(searchFiltered[i]);
     list.innerHTML=h;return;
@@ -2017,6 +2018,11 @@ function renderRside(pend){
     else if(t>=yesterdayStart)yesterday.push(l);
     else more.push(l);
   });
+  /* Sort each bucket strictly newest-first so the latest lead is always on top */
+  function _newestFirst_(a,b){return leadArrivalTs(b)-leadArrivalTs(a);}
+  today.sort(_newestFirst_);
+  yesterday.sort(_newestFirst_);
+  more.sort(_newestFirst_);
 
   function secHtml(key,lbl,col,arr,mt){
     var open=rsAccOpen[key];
@@ -4244,7 +4250,8 @@ function ptSendTestNotif(){
     body: 'If you see this, notifications are working! They appear even when the tab is closed.',
     icon: '/arion-icon.png',
     tag: 'arion-test',
-    requireInteraction: true
+    requireInteraction: true,
+    silent: true
   });
   n.onclick=function(){window.focus();n.close();showToast('Notification clicked!','Test successful',false);};
   showToast('Test notification sent!','Check the corner of your screen',false);
