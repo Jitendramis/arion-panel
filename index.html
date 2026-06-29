@@ -1141,9 +1141,14 @@ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'
 function branchById(id){for(var i=0;i<BRANCHES.length;i++)if(BRANCHES[i].id===id)return BRANCHES[i];return null;}
 function fmtDate(s){
   if(!s)return '—';s=String(s).trim();var d=new Date(s);
-  if(isNaN(d.getTime())){var m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,T]*(\d{1,2})?:?(\d{2})?/);if(m)d=new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0));}
-  if(isNaN(d.getTime()))return s.length>20?s.substring(0,20):s;
   var mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(isNaN(d.getTime())){
+    var mn={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+    var mm1=s.match(/(\d{1,2})[\/\-]([A-Za-z]{3,})[\/\-](\d{4})[ ,T]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?/);
+    if(mm1&&mn[mm1[2].toLowerCase().substring(0,3)]!==undefined){d=new Date(+mm1[3],mn[mm1[2].toLowerCase().substring(0,3)],+mm1[1],+(mm1[4]||0),+(mm1[5]||0),+(mm1[6]||0));}
+    else{var m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,T]*(\d{1,2})?:?(\d{2})?/);if(m)d=new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0));}
+  }
+  if(isNaN(d.getTime()))return s.length>20?s.substring(0,20):s;
   var hh=d.getHours(),mm=d.getMinutes(),ap=hh>=12?'PM':'AM',h=hh%12;if(h===0)h=12;
   return d.getDate()+' '+mon[d.getMonth()]+' '+d.getFullYear()+' · '+h+':'+(mm<10?'0'+mm:mm)+' '+ap;
 }
@@ -1828,9 +1833,16 @@ function beep(freq,dur,vol,delay){ /* alarms disabled — no sound */ }
 function reminderChime(){ /* alarms disabled — no sound */ }
 function slaSound(level){ /* alarms disabled — no sound */ }
 function leadArrivalTs(l){
+  /* ts (number) is most reliable for sorting — prefer it */
+  if(l.ts&&!isNaN(l.ts)&&typeof l.ts==='number')return +l.ts;
   var s=l.dateTime||l.createdAt;
   if(s){var d=new Date(s);
-    if(isNaN(d.getTime())){var m=String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,T]*(\d{1,2})?:?(\d{2})?/);if(m)d=new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0));}
+    if(isNaN(d.getTime())){
+      var mn={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+      var mm1=String(s).match(/(\d{1,2})[\/\-]([A-Za-z]{3,})[\/\-](\d{4})[ ,T]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?/);
+      if(mm1&&mn[mm1[2].toLowerCase().substring(0,3)]!==undefined)d=new Date(+mm1[3],mn[mm1[2].toLowerCase().substring(0,3)],+mm1[1],+(mm1[4]||0),+(mm1[5]||0),+(mm1[6]||0));
+      else{var m=String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,T]*(\d{1,2})?:?(\d{2})?/);if(m)d=new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0));}
+    }
     if(!isNaN(d.getTime()))return d.getTime();
   }
   return (l.ts&&!isNaN(l.ts))?+l.ts:0;
