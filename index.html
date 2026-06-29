@@ -1818,40 +1818,15 @@ function rsFilterMatch(l){
   if(rsFilter.fTo&&(ts>to||ts===0))return false;
   return true;
 }
-function initAudio(){try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
-function beep(freq,dur,vol,delay){
-  if(!audioCtx)return;
-  setTimeout(function(){
-    try{
-      if(audioCtx.state==='suspended')audioCtx.resume();
-      var o=audioCtx.createOscillator(),g=audioCtx.createGain(),t=audioCtx.currentTime;
-      o.type='sine';o.frequency.value=freq;o.connect(g);g.connect(audioCtx.destination);
-      g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0008,t+dur);o.start(t);o.stop(t+dur);
-    }catch(e){}
-  },delay||0);
-}
-/* Normal pleasant reminder ringtone — a soft 3-note chime that repeats twice.
-   Replaces the old harsh siren. Gentle, like a phone notification. */
-function reminderChime(){
-  if(!audioCtx)return;
-  try{
-    if(audioCtx.state==='suspended')audioCtx.resume();
-    /* Two gentle rounds of a rising 3-note chime (C6 -> E6 -> G6) */
-    var notes=[1047,1319,1568]; /* C6, E6, G6 */
-    var round,k,delay=0;
-    for(round=0;round<2;round++){
-      for(k=0;k<notes.length;k++){
-        beep(notes[k],0.18,0.12,delay);
-        delay+=150;
-      }
-      delay+=350; /* gap between the two rounds */
-    }
-  }catch(e){}
-}
-function slaSound(level){
-  /* Always play the normal pleasant chime (no harsh siren) */
-  reminderChime();
-}
+/* ============================================================
+   ALL ALARMS DISABLED (removed for now — re-enable later if needed).
+   These functions are kept as no-op stubs so existing calls don't break.
+   No sound, no siren, no chime will play anywhere in the Branch Panel.
+============================================================ */
+function initAudio(){ /* alarms disabled — no audio context needed */ }
+function beep(freq,dur,vol,delay){ /* alarms disabled — no sound */ }
+function reminderChime(){ /* alarms disabled — no sound */ }
+function slaSound(level){ /* alarms disabled — no sound */ }
 function leadArrivalTs(l){
   var s=l.dateTime||l.createdAt;
   if(s){var d=new Date(s);
@@ -1882,7 +1857,7 @@ function pendingList(){
 function todayPendingCount(){return LEADS.filter(isTodayPending).length;}
 function ageLabel(a){if(a>=1440)return Math.floor(a/1440)+'d';if(a>=60)return Math.floor(a/60)+'h';if(a>=1)return Math.floor(a)+'m';return '<1m';}
 function ageColor(a){if(a<60)return '#34d399';if(a<360)return '#f5a623';if(a<1440)return '#fb6a78';return '#6b7280';}
-function ringBell(){var t=$('rsidetoggle'),o=$('rsideOpen'),hb=$('hBell');[t,o,hb].forEach(function(b){if(b){b.classList.remove('ring');void b.offsetWidth;b.classList.add('ring');}});}
+function ringBell(){ /* alarms disabled — no bell shake */ }
 function nextReminderMin(l){
   if(l.customReminderAt)return (l.customReminderAt-Date.now())/60000;
   var last=l._lastReminderAt||leadArrivalTs(l);return 15-((Date.now()-last)/60000);
@@ -2270,18 +2245,7 @@ function snakeInject(id){
   card.style.position='relative';
   card.appendChild(svg);
 }
-function startSiren(id){
-  /* Normal reminder: just a gentle bell shake on the bell icon.
-     No red screen flash, no snake animation (kept it calm/normal). */
-  slaRinging[id]=true;
-  ringBell();
-  renderRside(pendingList());
-  if(slaSirenTimers[id])clearTimeout(slaSirenTimers[id]);
-  slaSirenTimers[id]=setTimeout(function(){
-    delete slaSirenTimers[id];
-    renderRside(pendingList());
-  },4000);
-}
+function startSiren(id){ /* alarms disabled — no siren / no bell shake */ }
 function ndvPauseSiren(id){
   /* NDV open hone pe siren/snake visual temporarily rokta hai — lead pending rehti hai */
   if(slaSirenTimers[id]){clearTimeout(slaSirenTimers[id]);delete slaSirenTimers[id];}
@@ -2330,9 +2294,19 @@ function slaCheck(){
   pend.forEach(function(l){
     if(leadAgeMin(l)<3)return;
     if(l.customReminderAt){
-      if(Date.now()<l.customReminderAt)return;
+      var due=Date.now()-l.customReminderAt;
+      /* Not due yet — wait */
+      if(due<0)return;
+      /* STALE reminder: agar reminder time 2 min se zyada purana hai, to ye
+         panel band hone ke baad ka chhoot gaya / purana test reminder hai.
+         Bina alarm bajaye chup-chaap clear kar do (no ring). */
+      if(due>120000){
+        var sid=l.id;fbDb.ref('/leads/'+sid+'/customReminderAt').remove().catch(noop);
+        delete l.customReminderAt;delete slaAlerted[sid];
+        return;
+      }
+      /* Fresh due reminder (last 2 min) — ring it */
       l._lastReminderAt=Date.now();slaAlerted[l.id]=Date.now();
-      /* Only ring if global alarm is ON (Admin can turn it off) */
       if(ALARM_ENABLED){ringBell();slaSound(1);startSiren(l.id);}
       showToast('\u23f0 Reminder',l.id+' \u00b7 '+(l.name||'')+' \u2014 attend now!',true);
       pushReminder(l);
@@ -2346,6 +2320,21 @@ function slaCheck(){
   for(var id in slaAlerted){if(!ids[id]){delete slaAlerted[id];if(slaSirenTimers[id]){clearTimeout(slaSirenTimers[id]);delete slaSirenTimers[id];}delete slaRinging[id];}}
   updateNotif();
 }
+/* Utility: clear ALL stale/past reminders across leads in one shot.
+   Run from browser console: clearAllStaleReminders()
+   Removes any customReminderAt that is in the past (ghost alarms). */
+function clearAllStaleReminders(){
+  var now=Date.now(),cleared=0;
+  LEADS.forEach(function(l){
+    if(l.customReminderAt&&l.customReminderAt<=now){
+      fbDb.ref('/leads/'+l.id+'/customReminderAt').remove().catch(noop);
+      delete l.customReminderAt;delete slaAlerted[l.id];cleared++;
+    }
+  });
+  showToast('\u2713 Cleared stale reminders',cleared+' old reminders removed',false);
+  return cleared+' stale reminders cleared';
+}
+
 function startSla(){if(slaTimer)clearInterval(slaTimer);slaTimer=setInterval(slaCheck,20000);}
 function stopSla(){
   if(slaTimer){clearInterval(slaTimer);slaTimer=null;}
