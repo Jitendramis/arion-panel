@@ -59,6 +59,43 @@ body{font-family:'Figtree',sans-serif;background:var(--bg);color:var(--ink);min-
 .dot{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 9px #34d399}
 .logout{background:transparent;border:1px solid var(--line);color:var(--mut);padding:8px 15px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.13s}
 .logout:hover{border-color:var(--red);color:var(--red)}
+/* === Add Lead button (NEW) === */
+.addlead-btn{background:var(--grad-blue);border:none;color:#fff;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.14s;box-shadow:0 4px 14px rgba(234,106,23,.28);white-space:nowrap}
+.addlead-btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 6px 20px rgba(234,106,23,.4)}
+.addlead-btn:active{transform:translateY(0)}
+/* === Manual Lead Modal (NEW) === */
+.mm-overlay{position:fixed;inset:0;z-index:600;background:rgba(20,24,33,.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto}
+.mm-box{background:#ffffff;border:1px solid var(--line2);border-radius:18px;width:100%;max-width:540px;box-shadow:0 24px 60px rgba(0,0,0,.22);margin:auto}
+.mm-head{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between}
+.mm-title{font-family:'Space Grotesk','Sora',sans-serif;font-weight:800;font-size:16px;color:var(--ink)}
+.mm-sub{font-size:12px;color:var(--mut);margin-top:4px;line-height:1.4}
+.mm-x{background:#f3f4f6;border:1px solid var(--line);border-radius:9px;color:var(--mut);width:32px;height:32px;cursor:pointer;font-size:18px;flex:none}
+.mm-x:hover{border-color:var(--red);color:var(--red)}
+.mm-body{padding:20px 24px}
+.mm-enq{display:flex;align-items:center;justify-content:space-between;background:rgba(234,106,23,.08);border:1px solid rgba(234,106,23,.25);border-radius:12px;padding:12px 16px;margin-bottom:18px}
+.mm-enq-lbl{font-size:11px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.mm-enq-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--blue)}
+.mm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mm-field{display:flex;flex-direction:column}
+.mm-full{grid-column:1/-1}
+.mm-field label{font-size:11px;color:var(--mut);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.mm-req{color:var(--red)}
+.mm-inp{background:#ffffff;border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:13.5px;padding:10px 13px;outline:none;transition:.14s}
+.mm-inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(234,106,23,.14)}
+.mm-ta{background:#ffffff;border:1px solid var(--line);border-radius:9px;color:var(--ink);font-family:inherit;font-size:13.5px;padding:10px 13px;outline:none;min-height:70px;resize:vertical;transition:.14s}
+.mm-ta:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(234,106,23,.14)}
+.mm-msg{margin-top:14px;font-size:13px;font-weight:700;padding:10px 14px;border-radius:9px}
+.mm-msg.err{background:rgba(251,106,120,.1);color:var(--red);border:1px solid rgba(251,106,120,.2)}
+.mm-msg.ok{background:rgba(52,211,153,.1);color:#10b981;border:1px solid rgba(52,211,153,.2)}
+.mm-actions{display:flex;gap:10px;margin-top:20px}
+.mm-save{flex:1;background:var(--grad-blue);border:none;color:#fff;padding:13px;border-radius:11px;font-family:'Space Grotesk','Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.15s;box-shadow:0 4px 14px rgba(234,106,23,.28)}
+.mm-save:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.mm-save:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.mm-cancel{flex:none;background:#f3f4f6;border:1px solid var(--line);color:var(--mut);padding:13px 22px;border-radius:11px;font-family:inherit;font-size:13.5px;cursor:pointer;transition:.13s}
+.mm-cancel:hover{border-color:var(--mut)}
+/* === Manual badge (NEW) === */
+.man-badge{display:inline-block;background:rgba(234,106,23,.14);color:var(--blue);border:1px solid rgba(234,106,23,.28);border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;letter-spacing:.3px;margin-left:6px;vertical-align:middle}
+@media(max-width:560px){.mm-grid{grid-template-columns:1fr}}
 
 /* SHELL — grid columns defined in SHELL/GRID section below */
 .side{background:linear-gradient(180deg,#ffffff,#faf8f3);border-right:1px solid var(--line);min-height:calc(100vh - 69px);padding:20px 14px;overflow:hidden;box-shadow:inset -1px 0 0 rgba(255,255,255,.02)}
@@ -922,6 +959,7 @@ select.ein{cursor:pointer}
       <button class="hbell" id="hBell" onclick="toggleRside()" title="Pending Leads">🔔<span class="notifdot" id="notifDot1" style="display:none">0</span></button>
       <button class="htask" id="hTask" onclick="toggleTpanel()" title="My Tasks">📋<span class="taskdot" id="taskDot">0</span></button>
       <button class="htask" id="pushToggleBtn" onclick="openPushTest()" title="Push Diagnostics - click to test" style="font-size:17px">🔔</button>
+      <button class="addlead-btn" onclick="openManualModal()" title="Add Manual Lead">+ Add Lead</button>
       <button class="logout" onclick="doLogout()">Logout</button>
     </div>
   </div>
@@ -1040,7 +1078,8 @@ var BRANCHES=[
   {id:'hyderabad',name:'Hyderabad',city:'Hyderabad, TS',call:'+91 93119 68385'},
   {id:'indore',name:'Indore',city:'Indore, MP',call:'+91 81302 84058'},
   {id:'bharuch',name:'Bharuch',city:'Bharuch, GJ',call:'+91 70176 98809'},
-  {id:'vizag',name:'Visakhapatnam',city:'Vizag, AP',call:'+91 98215 11225'}
+  {id:'vizag',name:'Visakhapatnam',city:'Vizag, AP',call:'+91 98215 11225'},
+  {id:'raipur',name:'Raipur (Manufacturing Plant)',city:'Raipur, CG',call:'+91 00000 00000'}
 ];
 var STATUSES=['New','Contacted','Quoted','Won','Lost'];
 var UNITS=['pcs','nos','mtr','ft','kg','ton','set','bundle','sqft'];
@@ -1085,7 +1124,7 @@ var CRM_RENTAL=[
 /* PURCHASE tabs */
 var CRM_PURCHASE=[
  T_CONTACT,T_ADDRESS,T_VISIT,T_FOLLOWUP,
- {id:'quotation',label:'Quotation',note:'Item Material List se — Qty auto, Amount = Rate × Qty, Total auto-calculates with GST',fields:[{k:'quoteDate',l:'Quote Date',t:'date'},{k:'item',l:'Item',t:'material'},{k:'size',l:'Size'},{k:'rate',l:'Rate',t:'number',calc:1},{k:'qty',l:'Qty',t:'number',calc:1},{k:'amount',l:'Amount (excl. GST)',t:'number'},{k:'gst',l:'GST %',t:'select',o:'gstPct',calc:1},{k:'total',l:'Total (incl. GST)',t:'number'},{k:'validity',l:'Validity',t:'date'},{k:'remarks',l:'Remarks',t:'textarea'}]},
+ {id:'quotation',label:'Quotation',note:'From Item Material List — Qty auto, Amount = Rate × Qty, Total auto-calculates with GST',fields:[{k:'quoteDate',l:'Quote Date',t:'date'},{k:'item',l:'Item',t:'material'},{k:'size',l:'Size'},{k:'rate',l:'Rate',t:'number',calc:1},{k:'qty',l:'Qty',t:'number',calc:1},{k:'amount',l:'Amount (excl. GST)',t:'number'},{k:'gst',l:'GST %',t:'select',o:'gstPct',calc:1},{k:'total',l:'Total (incl. GST)',t:'number'},{k:'validity',l:'Validity',t:'date'},{k:'remarks',l:'Remarks',t:'textarea'}]},
  {id:'order',label:'Order',fields:[{k:'poNo',l:'PO No.'},{k:'orderDate',l:'Order Date',t:'date'},{k:'poCopy',l:'PO Copy',t:'file'},{k:'amount',l:'Order Amount',t:'number'},{k:'advance',l:'Advance',t:'number'},{k:'remarks',l:'Remarks',t:'textarea'}]},
  {id:'delivery',label:'Delivery',fields:[{k:'dispatchDate',l:'Dispatch Date',t:'date'},{k:'deliveryDate',l:'Delivery Date',t:'date'},{k:'vehicle',l:'Vehicle / Transport',t:'vehicle'},{k:'receivedBy',l:'Received By'},{k:'remarks',l:'Remarks',t:'textarea'}]},
  {id:'invoice',label:'Invoice',fields:[{k:'invNo',l:'Invoice No.'},{k:'invDate',l:'Invoice Date',t:'date'},{k:'gst',l:'GST No.'},{k:'taxable',l:'Taxable Amount',t:'number'},{k:'tax',l:'Tax',t:'number'},{k:'grandTotal',l:'Grand Total',t:'number'}]},
@@ -1135,13 +1174,36 @@ function doLogin(){
 }
 function resolveRole(user){
   state.uid=user.uid;state.email=user.email;
-  fbDb.ref('/panel_roles/'+user.uid).once('value').then(function(s){
+  /* First sync branches from Firebase (so newly-added branches like Raipur work), then validate role. */
+  fbDb.ref('/config/branches').once('value').then(function(bs){
+    _mergeFbBranches_(bs.val());
+    return fbDb.ref('/panel_roles/'+user.uid).once('value');
+  }).then(function(s){
     $('loginBtn').disabled=false;var r=s.val();
     if(!r){lerr('No role assigned to this account. Share this UID with admin: '+user.uid);firebase.auth().signOut();state.uid=null;return;}
     state.role=r.role;state.branch=r.role==='branch'?branchById(r.branch):null;
     if(r.role==='branch'&&!state.branch){lerr('Branch "'+r.branch+'" is not valid.');firebase.auth().signOut();state.role=null;return;}
     enterApp();
   }).catch(function(e){$('loginBtn').disabled=false;lerr('Role check error: '+(e.code||e.message));});
+}
+
+/* Merge Firebase /config/branches into the local BRANCHES list. */
+function _mergeFbBranches_(val){
+  if(!val)return;
+  var byId={};
+  BRANCHES.forEach(function(b){byId[b.id]=b;});
+  Object.keys(val).forEach(function(k){
+    var b=val[k];
+    if(b&&b.id){byId[b.id]=b;}
+  });
+  var merged=Object.keys(byId).map(function(id){return byId[id];});
+  merged.sort(function(a,b){
+    var ao=a.id==='gurugram'?-1:(a.order||50);
+    var bo=b.id==='gurugram'?-1:(b.order||50);
+    if(ao!==bo)return ao-bo;
+    return String(a.name||'').localeCompare(String(b.name||''));
+  });
+  BRANCHES=merged;
 }
 function enterApp(){
   $('login').classList.add('hide');$('app').classList.remove('hide');
@@ -1911,6 +1973,7 @@ function cardHtml(l){
     +'<div class="rcrow1">'
       +(isActiveTab?'<span class="rctab-pin">▶</span>':'')
       +'<span class="rslead">'+esc(l.id)+'</span>'
+      +(l.source==='manual'||l.manualEntry?'<span class="man-badge" style="margin-left:0">MANUAL</span>':'')
       +'<span class="rsvc '+svcCls+'">'+svcLabel+'</span>'
       +'<span class="rsage" style="color:'+acol+';font-size:10.5px">'+ageLabel(a)+'</span>'
     +'</div>'
@@ -2427,7 +2490,7 @@ function render(){
     var hasFile=findUrls(l.material).length>0;
     var matTxt=(l.material||'—').replace(/https?:\/\/[^\s]+/g,'').trim()||'—';
     html+='<tr data-id="'+esc(l.id)+'" class="'+(state.selectedId===l.id?'rowsel':'')+'" onclick="openRecord(\''+esc(l.id)+'\')">'+
-      '<td class="t-lid">'+esc(l.id||'')+'</td><td class="t-cust">'+esc(l.name||'—')+'</td><td class="t-sub">'+esc(l.company||'—')+'</td>'+
+      '<td class="t-lid">'+esc(l.id||'')+(l.source==='manual'||l.manualEntry?'<span class="man-badge">MANUAL</span>':'')+'</td><td class="t-cust">'+esc(l.name||'—')+'</td><td class="t-sub">'+esc(l.company||'—')+'</td>'+
       '<td class="t-pin">'+esc(l.waNumber||'—')+'</td><td class="t-mat">'+(hasFile?'<span class="clip">📎 </span>':'')+esc(matTxt.substring(0,70))+'</td>'+
       '<td class="t-pin">'+esc(l.pincode||'—')+'</td><td class="t-sub">'+esc(l.location||'—')+'</td><td class="t-sub">'+esc(fmtDate(l.dateTime||l.createdAt))+'</td><td>'+right+'</td></tr>';
   });
@@ -3063,7 +3126,7 @@ function noServiceHtml(l){
   for(i=0;i<urls.length;i++){fh+='<button class="cdfile" onclick="cdOpen(\''+esc(urls[i])+'\')">\ud83d\udcce '+esc(driveLabel(urls[i]))+'</button>';}
   html+='<div class="panel"><div class="psec"><div class="pt">What customer sent<small>Use this to decide — Rental or Purchase</small></div></div><div class="cdbubble">'+esc(raw||'\u2014 Customer sent no text.')+'</div>'+(fh?('<div class="cflabel">Attachment</div>'+fh):'')+'</div>';
   var ml=matList(l);
-  if(ml.length){var rows='';ml.forEach(function(it){rows+='<tr><td class="it">'+esc(it.name||'\u2014')+'</td><td>'+esc(it.size||'\u2014')+'</td><td class="mq">'+esc(it.qty||'')+'</td><td>'+esc(it.unit||'')+'</td></tr>';});html+='<div class="panel"><div class="psec"><div class="pt">Material List<small>Customer ke requirement</small></div></div><table class="mltbl"><thead><tr><th>Item</th><th>Size</th><th>Qty</th><th>Unit</th></tr></thead><tbody>'+rows+'</tbody></table></div>';}
+  if(ml.length){var rows='';ml.forEach(function(it){rows+='<tr><td class="it">'+esc(it.name||'\u2014')+'</td><td>'+esc(it.size||'\u2014')+'</td><td class="mq">'+esc(it.qty||'')+'</td><td>'+esc(it.unit||'')+'</td></tr>';});html+='<div class="panel"><div class="psec"><div class="pt">Material List<small>Customer requirements</small></div></div><table class="mltbl"><thead><tr><th>Item</th><th>Size</th><th>Qty</th><th>Unit</th></tr></thead><tbody>'+rows+'</tbody></table></div>';}
   return html+'</div>';
 }
 function svcBanner(l){
@@ -3088,7 +3151,7 @@ function reviewHtml(l,lt){
     var ml=matList(l);
     if(ml.length){
       var rows='';ml.forEach(function(it){rows+='<tr><td class="it">'+esc(it.name||'—')+'</td><td>'+esc(it.size||'—')+'</td><td class="mq">'+esc(it.qty||'')+'</td><td>'+esc(it.unit||'')+'</td></tr>';});
-      html+='<div class="panel"><div class="psec"><div class="pt">Material List<small>Customer ke requirement</small></div></div><table class="mltbl"><thead><tr><th>Item</th><th>Size</th><th>Qty</th><th>Unit</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+      html+='<div class="panel"><div class="psec"><div class="pt">Material List<small>Customer requirements</small></div></div><table class="mltbl"><thead><tr><th>Item</th><th>Size</th><th>Qty</th><th>Unit</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
     }
   }
   return html+'</div>';
@@ -3227,7 +3290,7 @@ function saveCustomer(id){
   fbDb.ref('/leads/'+id).update(upd).then(function(){state.editCust=false;renderRecord();render();}).catch(function(e){alert('Save failed: '+e.code);});
 }
 function addMaterial(id){
-  var l=leadById(id);if(!l)return;var nm=$('mi_name').value.trim();if(!nm){alert('Item naam daalo.');$('mi_name').focus();return;}
+  var l=leadById(id);if(!l)return;var nm=$('mi_name').value.trim();if(!nm){alert('Enter item name.');$('mi_name').focus();return;}
   var item={name:nm,size:$('mi_size').value.trim(),qty:$('mi_qty').value.trim(),unit:$('mi_unit').value};
   var arr=matList(l);
   if(matEdit>=0&&matEdit<arr.length){arr[matEdit]=item;matEdit=-1;}else{arr.push(item);}
@@ -3903,14 +3966,14 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
 <div id="pushTestOverlay" class="push-test-overlay hide">
   <div class="push-test-card">
     <div class="push-test-title">🔔 Push Notification Diagnostics</div>
-    <div class="push-test-sub">Har step check karo — problem identify hogi</div>
+    <div class="push-test-sub">Check each step - the problem will be identified</div>
 
     <!-- Step 1: Browser Support -->
     <div class="push-step" id="ptStep1">
       <div class="push-step-icon na" id="ptIcon1">1</div>
       <div class="push-step-info">
         <div class="push-step-label">Browser Support</div>
-        <div class="push-step-detail" id="ptDetail1">ServiceWorker + PushManager check kar raha hai...</div>
+        <div class="push-step-detail" id="ptDetail1">Checking ServiceWorker + PushManager...</div>
       </div>
       <div class="push-step-status" id="ptStatus1">—</div>
     </div>
@@ -3920,7 +3983,7 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
       <div class="push-step-icon na" id="ptIcon2">2</div>
       <div class="push-step-info">
         <div class="push-step-label">Secure Context (HTTPS)</div>
-        <div class="push-step-detail" id="ptDetail2">Push ke liye HTTPS zaroori hai</div>
+        <div class="push-step-detail" id="ptDetail2">HTTPS is required for push</div>
       </div>
       <div class="push-step-status" id="ptStatus2">—</div>
     </div>
@@ -3930,7 +3993,7 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
       <div class="push-step-icon na" id="ptIcon3">3</div>
       <div class="push-step-info">
         <div class="push-step-label">Notification Permission</div>
-        <div class="push-step-detail" id="ptDetail3">Browser permission status check kar raha hai...</div>
+        <div class="push-step-detail" id="ptDetail3">Checking browser permission status...</div>
       </div>
       <div class="push-step-status" id="ptStatus3">—</div>
     </div>
@@ -3940,7 +4003,7 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
       <div class="push-step-icon na" id="ptIcon4">4</div>
       <div class="push-step-info">
         <div class="push-step-label">Service Worker Register</div>
-        <div class="push-step-detail" id="ptDetail4">SW registration check kar raha hai...</div>
+        <div class="push-step-detail" id="ptDetail4">Checking SW registration...</div>
       </div>
       <div class="push-step-status" id="ptStatus4">—</div>
     </div>
@@ -3950,7 +4013,7 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
       <div class="push-step-icon na" id="ptIcon5">5</div>
       <div class="push-step-info">
         <div class="push-step-label">VAPID Key Config</div>
-        <div class="push-step-detail" id="ptDetail5">VAPID key check kar raha hai...</div>
+        <div class="push-step-detail" id="ptDetail5">Checking VAPID key...</div>
       </div>
       <div class="push-step-status" id="ptStatus5">—</div>
     </div>
@@ -3960,7 +4023,7 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
       <div class="push-step-icon na" id="ptIcon6">6</div>
       <div class="push-step-info">
         <div class="push-step-label">FCM Subscription</div>
-        <div class="push-step-detail" id="ptDetail6">Firebase subscription check kar raha hai...</div>
+        <div class="push-step-detail" id="ptDetail6">Checking Firebase subscription...</div>
       </div>
       <div class="push-step-status" id="ptStatus6">—</div>
     </div>
@@ -3979,6 +4042,129 @@ function saveDlPicker(){if(!DL_CTX.leadId)return;var d=$('dlPickerDate');setTask
 
 <script>
 /* ═══ PUSH TEST PANEL ═══════════════════════════════════ */
+/* ===== MANUAL LEAD ENTRY ===== */
+/* Separate series: MAN-XXXX. Uses a Firebase atomic counter so two agents
+   creating leads at the same time never collide. */
+
+function openManualModal(){
+  ['mmName','mmCompany','mmPhone','mmPincode','mmLocation','mmMaterial','mmNote'].forEach(function(id){
+    var el=$(id);if(el)el.value='';
+  });
+  if($('mmDealType'))$('mmDealType').value=(state.case==='purchase'?'purchase':state.case==='other'?'other':'rental');
+  if($('mmLeadStatus'))$('mmLeadStatus').value='new';
+  var msg=$('mmMsg');if(msg)msg.className='mm-msg hide';
+  $('mmEnqVal').textContent='MAN-....';
+
+  $('manualModal').style.display='flex';
+
+  fbDb.ref('/config/manual_lead_counter').once('value').then(function(s){
+    var cur=s.val()||0;
+    $('mmEnqVal').textContent='MAN-'+_pad4_(cur+1);
+  }).catch(function(){
+    $('mmEnqVal').textContent='MAN-....';
+  });
+}
+
+function closeManualModal(){
+  $('manualModal').style.display='none';
+}
+
+function _pad4_(n){var s=String(n);while(s.length<4)s='0'+s;return s;}
+
+function _mmErr_(t){var m=$('mmMsg');if(m){m.textContent=t;m.className='mm-msg err';}}
+
+function saveManualLead(){
+  var name    = String(($('mmName')||{}).value||'').trim();
+  var company = String(($('mmCompany')||{}).value||'').trim();
+  var phone   = String(($('mmPhone')||{}).value||'').replace(/[^0-9]/g,'');
+  var pincode = String(($('mmPincode')||{}).value||'').replace(/[^0-9]/g,'');
+  var location= String(($('mmLocation')||{}).value||'').trim();
+  var dealType= String(($('mmDealType')||{}).value||'rental');
+  var leadStat= String(($('mmLeadStatus')||{}).value||'new');
+  var material= String(($('mmMaterial')||{}).value||'').trim();
+  var note    = String(($('mmNote')||{}).value||'').trim();
+
+  if(!name){_mmErr_('Enter customer name.');return;}
+  if(!company){_mmErr_('Enter company name.');return;}
+  if(phone.length<10){_mmErr_('Enter a valid 10-digit WhatsApp/phone number.');return;}
+
+  var brId=(state.branch&&state.branch.id)||'gurugram';
+  var brName=(state.branch&&state.branch.name)||'';
+
+  var btn=$('mmSaveBtn');
+  if(btn){btn.disabled=true;btn.textContent='Creating...';}
+
+  fbDb.ref('/config/manual_lead_counter').transaction(function(current){
+    return (current||0)+1;
+  }, function(error, committed, snap){
+    if(error){
+      _mmErr_('Counter error: '+error.message);
+      if(btn){btn.disabled=false;btn.textContent='Create Lead';}
+      return;
+    }
+    if(!committed){
+      _mmErr_('Counter busy - please try again.');
+      if(btn){btn.disabled=false;btn.textContent='Create Lead';}
+      return;
+    }
+
+    var num=snap.val();
+    var leadId='MAN-'+_pad4_(num);
+    var now=Date.now();
+
+    var lead={
+      id:leadId,
+      leadId:leadId,
+      name:name,
+      company:company,
+      waNumber:phone,
+      pincode:pincode,
+      location:location||pincode,
+      material:material,
+      dealType:dealType,
+      service:(dealType==='rental'?'Scaffolding Rental':dealType==='purchase'?'Scaffolding Purchase':''),
+      source:'manual',
+      manualEntry:true,
+      branch:brId,
+      branchName:brName,
+      brkey:brId+'_true',
+      released:true,
+      leadType:leadStat,
+      status:'New',
+      ts:now,
+      createdAt:new Date().toString(),
+      createdBy:state.email||'',
+      enteredBy:state.email||''
+    };
+
+    if(note){lead.agentNote=note;}
+
+    if(leadStat==='real'){
+      lead.assignedTo=state.email||'';
+      lead.realAt=now;
+      lead.classifyBy=state.email||'';
+      lead.firstSeenBy=state.email||'';
+      lead.firstSeenAt=now;
+    }
+
+    fbDb.ref('/leads/'+leadId).set(lead).then(function(){
+      if(leadStat==='real'){
+        setTimeout(function(){
+          var l=leadById(leadId);
+          if(l)autoCreateFirstTask(l);
+        },600);
+      }
+      closeManualModal();
+      switchNav(dealType, leadStat==='real'?'real':'new');
+      state.selectedId=leadId;
+      showToast('Manual lead created!',leadId+' - '+name+' ('+company+')',false);
+    }).catch(function(e){
+      _mmErr_('Save failed: '+(e.code||e.message));
+      if(btn){btn.disabled=false;btn.textContent='Create Lead';}
+    });
+  });
+}
+
 function openPushTest(){
   $('pushTestOverlay').classList.remove('hide');
   ptRunDiagnostics();
@@ -4007,7 +4193,7 @@ function ptRunDiagnostics(){
     if(!hasSW)miss.push('ServiceWorker');
     if(!hasPM)miss.push('PushManager');
     if(!hasNotif)miss.push('Notification API');
-    ptSet(1,'✗','fail','Browser Support','Missing: '+miss.join(', ')+' — Chrome ya Edge use karo','FAIL','fail');
+    ptSet(1,'✗','fail','Browser Support','Missing: '+miss.join(', ')+' - use Chrome or Edge','FAIL','fail');
   }
 
   /* Step 2: Secure context */
@@ -4022,20 +4208,20 @@ function ptRunDiagnostics(){
   /* Step 3: Permission */
   var perm=Notification.permission;
   if(perm==='granted'){
-    ptSet(3,'✓','ok','Permission','Browser ne notifications allow ki hain','GRANTED','ok');
+    ptSet(3,'✓','ok','Permission','Browser has allowed notifications','GRANTED','ok');
   } else if(perm==='denied'){
     allOk=false;
-    ptSet(3,'✗','fail','Permission','BLOCKED hai — Site Settings > Notifications > Allow karo','DENIED','fail');
+    ptSet(3,'✗','fail','Permission','BLOCKED - Site Settings > Notifications > Allow','DENIED','fail');
   } else {
     allOk=false;
-    ptSet(3,'?','wait','Permission','Permission maangi nahi gayi abhi tak — "Run Diagnostics" se request hogi','PENDING','wait');
+    ptSet(3,'?','wait','Permission','Permission not requested yet - click "Run Diagnostics" to request','PENDING','wait');
     Notification.requestPermission().then(function(p){
       ptRunDiagnostics();
     });
   }
 
   /* Step 4: Service Worker — GAS pe MIME issue hoti hai, direct Notification use karo */
-  ptSet(4,'—','na','Service Worker (GAS)','GAS pe SW MIME type issue hoti hai — Direct Notification API use ho rahi hai (tab open ho tab kaam karega)','SKIP','wait');
+  ptSet(4,'—','na','Service Worker (GAS)','GAS has SW MIME type issues - using Direct Notification API (works while tab is open)','SKIP','wait');
 
   /* Step 5: VAPID Key */
   var vk=PUSH_VAPID_KEY||'';
@@ -4044,33 +4230,102 @@ function ptRunDiagnostics(){
     ptSet(5,'✗','fail','VAPID Key','HTML mein REPLACE_WITH_YOUR_VAPID_KEY placeholder hai — Firebase Console > Cloud Messaging > Web Push Certificates > Generate','MISSING','fail');
   } else if(vk.length<20){
     allOk=false;
-    ptSet(5,'✗','fail','VAPID Key','Key bahut chhoti hai ('+vk.length+' chars) — sahi key daalo','INVALID','fail');
+    ptSet(5,'✗','fail','VAPID Key','Key too short ('+vk.length+' chars) - enter the correct key','INVALID','fail');
   } else {
     ptSet(5,'✓','ok','VAPID Key','Key set hai ('+vk.length+' chars) — '+vk.slice(0,12)+'...','OK','ok');
   }
 
   /* Step 6: Direct notification test */
   if(Notification.permission==='granted'){
-    ptSet(6,'✓','ok','Notification Ready','Direct Notification API active hai — tab open ho tab notifications aayengi','OK','ok');
+    ptSet(6,'✓','ok','Notification Ready','Direct Notification API active - notifications appear while tab is open','OK','ok');
     $('ptTestBtn').style.display='block';
   } else {
-    ptSet(6,'—','na','Notification Ready','Pehle permission allow karo (Step 3)','SKIP','wait');
+    ptSet(6,'—','na','Notification Ready','Allow permission first (Step 3)','SKIP','wait');
   }
 }
 
 /* Test notification — local (jab sab OK ho) */
 function ptSendTestNotif(){
-  if(Notification.permission!=='granted'){alert('Permission nahi hai!');return;}
+  if(Notification.permission!=='granted'){alert('Permission not granted!');return;}
   var n=new Notification('Test Notification - Arion Lead',{
-    body: 'Agar yeh dikh raha hai to notifications kaam kar rahi hain! Tab band karne par bhi aayengi.',
+    body: 'If you see this, notifications are working! They appear even when the tab is closed.',
     icon: '/arion-icon.png',
     tag: 'arion-test',
     requireInteraction: true
   });
   n.onclick=function(){window.focus();n.close();showToast('Notification clicked!','Test successful',false);};
-  showToast('Test notification bheji!','Dekho screen ke corner pe',false);
+  showToast('Test notification sent!','Check the corner of your screen',false);
 }
 </script>
+
+<!-- MANUAL LEAD ENTRY MODAL -->
+<div id="manualModal" class="mm-overlay" style="display:none">
+  <div class="mm-box">
+    <div class="mm-head">
+      <div>
+        <div class="mm-title">+ Add Manual Lead</div>
+        <div class="mm-sub">Enter customer details manually - without WhatsApp. A <span style="color:var(--blue)">Manual</span> badge will show.</div>
+      </div>
+      <button class="mm-x" onclick="closeManualModal()">&times;</button>
+    </div>
+    <div class="mm-body">
+      <div class="mm-enq" id="mmEnqPreview">
+        <span class="mm-enq-lbl">New Lead ID</span>
+        <span class="mm-enq-val" id="mmEnqVal">MAN-....</span>
+      </div>
+      <div class="mm-grid">
+        <div class="mm-field mm-full">
+          <label>Customer Name <span class="mm-req">*</span></label>
+          <input id="mmName" class="mm-inp" placeholder="Rajesh Kumar" autocomplete="off">
+        </div>
+        <div class="mm-field mm-full">
+          <label>Company Name <span class="mm-req">*</span></label>
+          <input id="mmCompany" class="mm-inp" placeholder="Kumar Constructions" autocomplete="off">
+        </div>
+        <div class="mm-field">
+          <label>WhatsApp / Phone <span class="mm-req">*</span></label>
+          <input id="mmPhone" class="mm-inp" placeholder="9876543210" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="mm-field">
+          <label>Pincode</label>
+          <input id="mmPincode" class="mm-inp" placeholder="392001" inputmode="numeric" maxlength="6" autocomplete="off">
+        </div>
+        <div class="mm-field mm-full">
+          <label>Location / Area</label>
+          <input id="mmLocation" class="mm-inp" placeholder="Bharuch, Gujarat" autocomplete="off">
+        </div>
+        <div class="mm-field">
+          <label>Deal Type <span class="mm-req">*</span></label>
+          <select id="mmDealType" class="mm-inp">
+            <option value="rental">Scaffolding Rental</option>
+            <option value="purchase">Scaffolding Purchase</option>
+            <option value="other">Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="mm-field">
+          <label>Lead Status</label>
+          <select id="mmLeadStatus" class="mm-inp">
+            <option value="new">New (verify later)</option>
+            <option value="real">Real (start working now)</option>
+          </select>
+        </div>
+        <div class="mm-field mm-full">
+          <label>Material / Requirement</label>
+          <textarea id="mmMaterial" class="mm-ta" placeholder="Props 500nos, Span 200nos, Cuplock system..."></textarea>
+        </div>
+        <div class="mm-field mm-full">
+          <label>Note (optional)</label>
+          <textarea id="mmNote" class="mm-ta" placeholder="Met after site visit, urgent requirement..." style="min-height:50px"></textarea>
+        </div>
+      </div>
+      <div class="mm-msg hide" id="mmMsg"></div>
+      <div class="mm-actions">
+        <button class="mm-save" id="mmSaveBtn" onclick="saveManualLead()">Create Lead</button>
+        <button class="mm-cancel" onclick="closeManualModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
