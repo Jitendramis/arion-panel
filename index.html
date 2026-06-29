@@ -1219,6 +1219,8 @@ function enterApp(){
   loadItemMaster();
   fbDb.ref('.info/connected').on('value',function(s){if(s.val()){$('liveTxt').textContent='Live';$('dot').style.background='#34d399';}else{$('liveTxt').textContent='Reconnecting';$('dot').style.background='#f5a623';}});
   startPresence();
+  /* Listen to global alarm toggle set by Admin */
+  fbDb.ref('/config/alarm_enabled').on('value',function(s){var v=s.val();ALARM_ENABLED=(v===null||v===undefined)?true:(v===true||v==='true');});
   if(state.role==='branch'){initAudio();startSla();var hb=$('hBell');if(hb)hb.classList.add('on');setTimeout(initPush,1200);}else{var rs=$('rside'),ro=$('rsideOpen'),sh=$('shell'),hb2=$('hBell');if(rs)rs.style.display='none';if(ro)ro.style.display='none';if(sh)sh.classList.add('rcollapsed');if(hb2)hb2.style.display='none';}
   switchNav('rental','new');
 }
@@ -1775,6 +1777,7 @@ function stopPresence(){
 
 /* ===== PHASE 3 — NOTIFICATIONS + SLA SOUND ALERTS ===== */
 var audioCtx=null,slaTimer=null,slaAlerted={},slaInit=false,prevLeadKeys={},notifOpen=false;
+var ALARM_ENABLED=true; /* global alarm toggle — controlled by Admin via /config/alarm_enabled */
 var slaSirenTimers={},slaRinging={},NOTE_CTX=null;
 var rsAccOpen={today:true,yesterday:false,more:false};
 var rsQuery='';
@@ -2329,8 +2332,9 @@ function slaCheck(){
     if(l.customReminderAt){
       if(Date.now()<l.customReminderAt)return;
       l._lastReminderAt=Date.now();slaAlerted[l.id]=Date.now();
-      ringBell();slaSound(1);startSiren(l.id);
-      showToast('\u23f0 Manual Reminder',l.id+' \u00b7 '+(l.name||'')+' \u2014 attend now!',true);
+      /* Only ring if global alarm is ON (Admin can turn it off) */
+      if(ALARM_ENABLED){ringBell();slaSound(1);startSiren(l.id);}
+      showToast('\u23f0 Reminder',l.id+' \u00b7 '+(l.name||'')+' \u2014 attend now!',true);
       pushReminder(l);
       var lid=l.id;fbDb.ref('/leads/'+lid+'/customReminderAt').remove().catch(noop);delete l.customReminderAt;
       return;
