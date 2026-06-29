@@ -1680,13 +1680,15 @@ function showLocalNotif(title,body,leadId,type){
   if(Notification.permission!=='granted')return;
   var now=Date.now();
   if(type==='new_lead'){if(pushLastLead[leadId]&&now-pushLastLead[leadId]<300000)return;pushLastLead[leadId]=now;}
-  var n=new Notification(title,{body:body,icon:'/arion-icon.png',tag:leadId||type,renotify:type==='reminder'});
+  var n=new Notification(title,{body:body,icon:'/arion-icon.png',tag:leadId||type,renotify:type==='reminder',requireInteraction:true});
   n.onclick=function(){
     window.focus();
     if(leadId){var l=leadById(leadId);if(l){state.selectedId=leadId;switchNav(caseOf(l),'real');}}
     n.close();
   };
-  setTimeout(function(){n.close();},type==='new_lead'?8000:5000);
+  /* WhatsApp-style: notification stays on screen until the user clicks or dismisses it.
+     Safety fallback closes it after 60s so notifications don't pile up forever. */
+  setTimeout(function(){try{n.close();}catch(e){}},60000);
 }
 
 function pushNewLead(l){
@@ -2207,7 +2209,7 @@ function showToast(title,sub,over){
   d.innerHTML='<div class="toastt">'+esc(title)+'</div><div class="toasts">'+esc(sub)+'</div>';
   d.onclick=function(){try{w.removeChild(d);}catch(e){}};
   w.appendChild(d);
-  setTimeout(function(){try{d.style.transition='.32s';d.style.opacity='0';d.style.transform='translateX(40px)';setTimeout(function(){try{w.removeChild(d);}catch(e){}},340);}catch(e){}},6000);
+  setTimeout(function(){try{d.style.transition='.32s';d.style.opacity='0';d.style.transform='translateX(40px)';setTimeout(function(){try{w.removeChild(d);}catch(e){}},340);}catch(e){}},8000);
 }
 function snakeRemove(id){
   var el=document.getElementById('snake_'+id);
