@@ -1177,12 +1177,18 @@ function resolveRole(user){
   /* First sync branches from Firebase (so newly-added branches like Raipur work), then validate role. */
   fbDb.ref('/config/branches').once('value').then(function(bs){
     _mergeFbBranches_(bs.val());
+    try{console.log('[login] branches loaded:',BRANCHES.map(function(b){return b.id;}).join(', '));}catch(e){}
     return fbDb.ref('/panel_roles/'+user.uid).once('value');
   }).then(function(s){
     $('loginBtn').disabled=false;var r=s.val();
+    try{console.log('[login] role record:',JSON.stringify(r));}catch(e){}
     if(!r){lerr('No role assigned to this account. Share this UID with admin: '+user.uid);firebase.auth().signOut();state.uid=null;return;}
     state.role=r.role;state.branch=r.role==='branch'?branchById(r.branch):null;
-    if(r.role==='branch'&&!state.branch){lerr('Branch "'+r.branch+'" is not valid.');firebase.auth().signOut();state.role=null;return;}
+    if(r.role==='branch'&&!state.branch){
+      var ids=BRANCHES.map(function(b){return b.id;}).join(', ');
+      lerr('Branch "'+r.branch+'" not found. Valid IDs: '+ids+'. Fix the branch value in /panel_roles for this user.');
+      firebase.auth().signOut();state.role=null;return;
+    }
     enterApp();
   }).catch(function(e){$('loginBtn').disabled=false;lerr('Role check error: '+(e.code||e.message));});
 }
