@@ -473,6 +473,13 @@ select.ein{cursor:pointer}
 .cdbubble{background:#e9f7ef;border:1px solid rgba(52,211,153,.25);border-radius:4px 14px 14px 14px;padding:14px 16px;font-size:13.5px;line-height:1.65;color:#211e18;white-space:pre-wrap;word-break:break-word}
 .cflabel{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut2);font-weight:700;margin:16px 0 8px}
 .cdfile{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:11px 13px;background:rgba(234,106,23,.08);border:1px solid rgba(234,106,23,.28);border-radius:10px;font-size:13px;font-weight:600;color:var(--bluelt);cursor:pointer;font-family:inherit;margin-bottom:8px}
+/* ── Inline image/attachment preview ── */
+.cdimg-wrap{position:relative;display:inline-block;max-width:340px;width:100%;border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;margin-bottom:10px;background:#f3f4f6;transition:.15s}
+.cdimg-wrap:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(234,106,23,.18)}
+.cdimg{display:block;width:100%;max-height:320px;object-fit:cover;background:#f3f4f6}
+.cdimg-fallback{align-items:center;gap:8px;padding:14px 16px;font-size:13px;font-weight:600;color:var(--bluelt)}
+.cdimg-hint{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:11px;font-weight:600;padding:14px 12px 8px;text-align:center;pointer-events:none}
+.cdimg-missing{display:flex;align-items:center;gap:8px;padding:13px 16px;background:#fff7ed;border:1px dashed #f5d9b8;border-radius:10px;font-size:12.5px;color:var(--mut);line-height:1.5}
 .cdfile:hover{background:rgba(234,106,23,.16)}
 .cdhint{margin-top:16px;font-size:12px;color:#b7760a;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.28);border-radius:10px;padding:12px 14px;line-height:1.55}
 .schip.tpend{background:rgba(245,166,35,.14);color:#b7760a;border:1px solid rgba(245,166,35,.34)}
@@ -3184,9 +3191,8 @@ function overviewHtml(l){
 }
 function noServiceHtml(l){
   var html='<div class="reviewwrap">'+svcBanner(l)+'<div class="panel">'+custHtml(l)+'</div>';
-  var raw=(l.material||'').replace(/https?:\/\/[^\s]+/g,'').trim();
-  var urls=findUrls(l.material),fh='',i;
-  for(i=0;i<urls.length;i++){fh+='<button class="cdfile" onclick="cdOpen(\''+esc(urls[i])+'\')">\ud83d\udcce '+esc(driveLabel(urls[i]))+'</button>';}
+  var raw=(l.material||'').replace(/https?:\/\/[^\s]+/g,'').replace(/\b(image|video|document)_[A-Za-z0-9]+/gi,'').replace(/\u2014/g,'').trim();
+  var fh=attachmentBlock(l.material);
   html+='<div class="panel"><div class="psec"><div class="pt">What customer sent<small>Use this to decide — Rental or Purchase</small></div></div><div class="cdbubble">'+esc(raw||'\u2014 Customer sent no text.')+'</div>'+(fh?('<div class="cflabel">Attachment</div>'+fh):'')+'</div>';
   var ml=matList(l);
   if(ml.length){var rows='';ml.forEach(function(it){rows+='<tr><td class="it">'+esc(it.name||'\u2014')+'</td><td>'+esc(it.size||'\u2014')+'</td><td class="mq">'+esc(it.qty||'')+'</td><td>'+esc(it.unit||'')+'</td></tr>';});html+='<div class="panel"><div class="psec"><div class="pt">Material List<small>Customer requirements</small></div></div><table class="mltbl"><thead><tr><th>Item</th><th>Size</th><th>Qty</th><th>Unit</th></tr></thead><tbody>'+rows+'</tbody></table></div>';}
@@ -3205,9 +3211,8 @@ function reviewHtml(l,lt){
   }
   var html='<div class="reviewwrap">'+banner+'<div class="panel">'+custHtml(l)+'</div>';
   if(lt==='new'){
-    var raw=(l.material||'').replace(/https?:\/\/[^\s]+/g,'').trim();
-    var urls=findUrls(l.material);var fh='';
-    for(var i=0;i<urls.length;i++){fh+='<button class="cdfile" onclick="cdOpen(\''+esc(urls[i])+'\')">📎 '+esc(driveLabel(urls[i]))+'</button>';}
+    var raw=(l.material||'').replace(/https?:\/\/[^\s]+/g,'').replace(/\b(image|video|document)_[A-Za-z0-9]+/gi,'').replace(/\u2014/g,'').trim();
+    var fh=attachmentBlock(l.material);
     html+='<div class="panel"><div class="psec"><div class="pt">What customer sent<small>Use this to decide — Real or Fake</small></div></div>'+
       '<div class="cdbubble">'+esc(raw||'— Customer sent no text.')+'</div>'+
       (fh?('<div class="cflabel">Attachment</div>'+fh):'')+'</div>';
@@ -3720,6 +3725,35 @@ function closeCustDrawer(){$('custdrawer').classList.remove('on');}
 function cdOpen(u){var i=driveId(u);if(i)openFilePreview(i,u,driveLabel(u));else window.open(u,'_blank');}
 function driveId(u){var m=String(u).match(/\/d\/([A-Za-z0-9_\-]+)/);if(!m)m=String(u).match(/[?&]id=([A-Za-z0-9_\-]+)/);return m?m[1]:'';}
 function driveLabel(u){var q=String(u).split('?')[0].split('#')[0];var seg=q.split('/');var last=seg[seg.length-1]||'';if(/\.(pdf|xlsx?|docx?|pptx?|png|jpe?g|gif|webp)$/i.test(last))return last;return 'View attachment';}
+/* Attachment block — Drive files inline image preview ke saath dikhata hai,
+   aur purane "image_XXX" (URL nahi) ka clear indicator deta hai. */
+function attachmentBlock(material){
+  var urls=findUrls(material);var html='';var i;
+  for(i=0;i<urls.length;i++){
+    var fid=driveId(urls[i]);var lbl=driveLabel(urls[i]);
+    if(fid){
+      /* Drive thumbnail (images + PDFs dono ke liye kaam karta hai), click pe full preview */
+      html+='<div class="cdimg-wrap" onclick="cdOpen(\''+esc(urls[i])+'\')" title="Click to view full size">'
+          +'<img class="cdimg" src="https://drive.google.com/thumbnail?id='+esc(fid)+'&sz=w600" '
+          +'onerror="this.style.display=\'none\';if(this.nextElementSibling)this.nextElementSibling.style.display=\'flex\'" alt="attachment">'
+          +'<div class="cdimg-fallback" style="display:none">\ud83d\udcce '+esc(lbl)+' \u2014 Click to open</div>'
+          +'<div class="cdimg-hint">\ud83d\udd0d Click to view full size</div>'
+          +'</div>';
+    }else{
+      html+='<button class="cdfile" onclick="cdOpen(\''+esc(urls[i])+'\')">\ud83d\udcce '+esc(lbl)+'</button>';
+    }
+  }
+  /* No URL but media reference (purana lead jisme image Drive pe save nahi hui) */
+  if(!urls.length){
+    var m=String(material||'').match(/\b(image|video|document)_[A-Za-z0-9]+/i);
+    if(m){
+      var typ=m[1].toLowerCase();
+      var icon=typ==='image'?'\ud83d\udcf7':(typ==='video'?'\ud83c\udfa5':'\ud83d\udcc4');
+      html+='<div class="cdimg-missing">'+icon+' Customer sent a '+esc(typ)+' \u2014 preview not available (purana lead, WhatsApp media expire ho gayi)</div>';
+    }
+  }
+  return html;
+}
 
 function smShow(title,tag,bodyHtml,footHtml){
   $('smtitle').textContent=title||'';$('smtag').textContent=tag||'';
