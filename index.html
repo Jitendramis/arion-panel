@@ -336,6 +336,23 @@ select.ein{cursor:pointer}
 .htb{padding:9px 15px;border:none;background:transparent;border-radius:8px;font-family:'Space Grotesk';font-weight:700;font-size:12px;color:var(--mut);cursor:pointer;display:flex;align-items:center;gap:6px;transition:.14s}
 .htb:hover{color:#1c1a15}
 .htb.on{background:var(--grad-blue);color:#fff;box-shadow:0 3px 11px rgba(234,106,23,.3)}
+/* ── Service Type banner (Rental/Purchase selector) ── */
+.svcbanner{display:flex;align-items:flex-start;gap:14px;background:linear-gradient(135deg,#fff7ed,#fffbf5);border:1px solid #f5d9b8;border-radius:14px;padding:16px 18px;margin-bottom:16px;flex-wrap:wrap}
+.svci{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.svctext{flex:1;min-width:200px}
+.svct{font-weight:700;font-size:15px;color:#1c1a15;font-family:'Space Grotesk'}
+.svcs{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.45}
+.svcacts{display:flex;gap:9px;align-items:center;flex-shrink:0}
+.svcbtn{padding:10px 18px;border:none;border-radius:10px;font-family:'Space Grotesk';font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.svcbtn.rental{background:var(--grad-blue);color:#fff}
+.svcbtn.rental:hover{box-shadow:0 4px 14px rgba(234,106,23,.35);transform:translateY(-1px)}
+.svcbtn.purchase{background:#fff;color:#1c1a15;border:1.5px solid var(--line)}
+.svcbtn.purchase:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
+/* ── New Lead count — RED (needs attention) ── */
+#nc_rental_new.has,#nc_purchase_new.has,#nc_other_new.has,
+.nav.on #nc_rental_new.has,.nav.on #nc_purchase_new.has,.nav.on #nc_other_new.has{
+  color:#fff;background:var(--grad-red);border-color:#e0414f;box-shadow:0 2px 7px rgba(224,65,79,.3)
+}
 .rprog{padding:0 30px 16px}
 .rprogbar{height:7px;background:#f1eee6;border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .rprogfill{height:100%;background:linear-gradient(90deg,#34d399,#e8650f);border-radius:6px;transition:width .35s var(--ease)}
