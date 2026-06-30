@@ -1069,6 +1069,7 @@ select.ein{cursor:pointer}
 var FB_CONFIG={apiKey:'AIzaSyAbCWguTxQLrQO4PPPgAQvzJB-SRaP5cnk',authDomain:'arion-bot-2d4e9.firebaseapp.com',projectId:'arion-bot-2d4e9',databaseURL:'https://arion-bot-2d4e9-default-rtdb.asia-southeast1.firebasedatabase.app',messagingSenderId:'REPLACE_WITH_SENDER_ID',appId:'REPLACE_WITH_APP_ID'};
 /* TODO: Firebase Console > Project Settings > Cloud Messaging > Web Push > VAPID Key */
 var PUSH_VAPID_KEY='BEwtmB_EuehEoescQv_dlMsq9j2Gb_2kAxMAj_183w7r3__RZ2B_dC8zW7BI7Mf5MwmsOso7uw1hhXhTEakSEbk';
+var ARION_ICON='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAFcklEQVR4nO2d228VVRSHfzPnzOW0GNuiUvBGEVtJqL3fQNREbQzRGoUA+u6Lf4H6L6jvJrwTH6SEGJEEU5/E6GkNLcEQWoP0oWkjpramdObcxgdSbOm5rDmzZ9Y2Xd9TU9a+ZH2z99nda0oNRGTxw0eDqH38n2k9u2JEaV9X452e9ErUIyNUA0k8jTAiSIGS+PqgiDBrBUjy64eSu6oCJPnRqZXDigIk+eqolsuyAiT56qmU020CJPnxUS63Zq0AQS0P57jmKUiIlwcC5OlPjs25lhXAjAnI08/BRs5lBTAjApgxZPvhRVYAMyKAGRHAjAhgRgQwIwKYEQHMiABmRAAzae4JUGj66Byc7uPhGgUB7n7aheJf8/FMShHarwCzsQVO5xvhGxoG3OEz6iekGO0FuIMngZRVV9vMyGnFs1GP/gJG6n+KU088B+vAoMLZqEdrAenWdlj7eyP1kTnyvqLZxIPWAlwFyXP634WRdhTMJh70FWCYcAdPRe7GbGiC0/WmggnFg7YC7I5jSLU8qaQvd1jfbUhbASr3bqfzdZiPPKasP5VoKcBwGuD0jKnr0EzfP85qiJYCnN4xGE4DKbb45x+kOHdEz21ISwGZkQ9IccWlOax99wUp1nqmC+l9L0SZVixoJyDVvA92x0ukWG9yHP6v3wDFPCneJYpNEu0EuMNnAIM2LS87jtK9v+H/9gMpPjN0itx3Uug1GwDuMO3+prBwE4WFmwAAf/ICqY3Z1Ar70Kv1Ti0WtBJgtfUhvbeDFOtlz//39bVvERR8Ujvdria0EhDm+tjb9NQH66vI3ZggtXO634Lh7go9t7jQR0DKgjt4ghRamJ9BcWluy/e87DiprWFn4Pa9E3p6caGNAKdzFGZjCynWm9yebH/6EoK8R2qv09WENgIyR+hHRK/Mh27gryF3/Qqpvd1+FKndT5PHixMtBJiNzbAP08qO+dtTKN69U/bfyq2MsmhUrtRCgDt4EkbaJsVWS7I/cxlBbp3UT4Z43I0bPQRQ72mCoOqZP8itw5+5TOoqtecgrAMDtHFjhF1AuvV5ctkx//vPKC4vVI0hb0MAMhpc0LELCHNLSTlq5q5fQeCvkfpzBt4jb31xwSvAMOAOEcuOQQne1MXaYXkP/vQlUpdmQxPsF3nLlawC7I6XkWp5ihSbu/UjSqtLpFjqD2UA/eo7LlgFhNmDwyQ1d2MCwfoqKdY5/BpruZLttyQNpwGPfz4Lw2nkGH4L/3z1Me5NfMkyNtsKcHrGtEg+EO3tu6iwCdDpWth6tputXMki4H7Z8RjH0BXhKtqzCHCHTmtXGuQqV/IIYNxzK2E27YV96JXkx016QGt/L7nsmDQcVxOJC9Dx6d/A6Xk78ZNZsr8jlrLgDtDKjgCw/Nlx5GavRh625ZPvYbX114zbKFeuXz0XeUwqia4Ap3MU5q7dpNji8gJycz8pGXfzGxS1SPrlrUQFhNlj/ex5IFDzQ7qXvQAEJVKs3X6UfD+lgsQEmI3NsDtHyfHeL18rG7u0sojcLeJWlnC5MjEB7sAJ8t17YXEW+flppeN7WbrQTIIHheQEhLr5pO/ZVPypi+SXeJMsVyYiILXnIKy2PnK8yu1ng9LaMvklXiC5VZCIgDAfvvk717a99aaKMCvL6U+mXCn/ayIzet2I7UBEADMigBkRwIwIYEYEMCMCmBEBzIgAZsyofw9XqJ/WsyuavRuyAxEBzJhA9D/LLYRnI+eyAph5IEBWQXJszrWsAGa2CJBVED8P53jbChAJ8VEut2W3IJGgnko5rfgZIBLUUS2XVT+ERUJ0auWw5ilIJNQPJXehkiuvsNAI89DW9XSLiPLUs1tE3l52uoyoW/S/3QFwDrW9w4UAAAAASUVORK5CYII=';
 var fbDb=null,fbReady=false,leadsRef=null;
 var BRANCHES=[
   {id:'gurugram',name:'Gurugram (Head Office)',city:'Gurugram, Haryana',call:'+91 99713 44556'},
@@ -1686,27 +1687,43 @@ function onPushToggleClick(){
 function showLocalNotif(title,body,leadId,type){
   if(Notification.permission!=='granted')return;
   var now=Date.now();
-  if(type==='new_lead'){if(pushLastLead[leadId]&&now-pushLastLead[leadId]<300000)return;pushLastLead[leadId]=now;}
-  var n=new Notification(title,{body:body,icon:'/arion-icon.png',tag:leadId||type,renotify:type==='reminder',requireInteraction:true,silent:true});
-  n.onclick=function(){
-    window.focus();
-    if(leadId){var l=leadById(leadId);if(l){state.selectedId=leadId;switchNav(caseOf(l),'real');}}
-    n.close();
-  };
-  /* WhatsApp-style: notification stays on screen until the user clicks or dismisses it.
-     Safety fallback closes it after 60s so notifications don't pile up forever. */
-  setTimeout(function(){try{n.close();}catch(e){}},60000);
+  /* Dedup: same lead notification within 60s is skipped (was 5 min — too long) */
+  if(type==='new_lead'){if(pushLastLead[leadId]&&now-pushLastLead[leadId]<60000)return;pushLastLead[leadId]=now;}
+  try{
+    var opts={
+      body:body,
+      icon:ARION_ICON,
+      badge:ARION_ICON,
+      tag:(leadId||type)+'_'+now,   /* unique tag so each notif shows separately (no replace) */
+      renotify:true,
+      requireInteraction:true,      /* stay on screen until user acts (needs macOS "Alerts" style) */
+      silent:true                   /* no sound (alarms disabled) */
+    };
+    var n=new Notification(title,opts);
+    n.onclick=function(){
+      window.focus();
+      if(leadId){var l=leadById(leadId);if(l){state.selectedId=leadId;switchNav(caseOf(l),'real');}}
+      n.close();
+    };
+    /* Safety: auto-close after 2 minutes so notifications don't pile up forever */
+    setTimeout(function(){try{n.close();}catch(e){}},120000);
+  }catch(e){}
 }
 
 function pushNewLead(l){
   if(!l)return;
-  showLocalNotif(
-    '\ud83d\udd14 New Lead - '+(l.name||l.id),
-    (l.company&&l.company!==l.name?l.company+' - ':'')+
-    (l.location||l.pincode||'')+
-    (l.material?'\n'+String(l.material).slice(0,60):''),
-    l.id,'new_lead'
-  );
+  /* Title: ENQ ID + customer name (so the lead is identifiable at a glance) */
+  var title='\ud83d\udd14 '+l.id+' \u00b7 '+(l.name||'New Lead');
+  /* Body: full details on separate lines */
+  var lines=[];
+  if(l.company&&l.company!==l.name)lines.push('\ud83c\udfe2 '+l.company);
+  var loc=l.location||l.pincode||'';
+  if(loc)lines.push('\ud83d\udccd '+loc);
+  if(l.waNumber)lines.push('\ud83d\udcde '+l.waNumber);
+  if(l.material)lines.push('\ud83d\udce6 '+String(l.material).slice(0,80));
+  var deal=l.dealType||caseOf(l);
+  if(deal&&deal!=='other')lines.push('\ud83c\udff7\ufe0f '+(deal==='rental'?'Rental':deal==='purchase'?'Purchase':deal));
+  showLocalNotif(title, lines.join('\n'), l.id, 'new_lead');
 }
 
 function pushReminder(l){
@@ -1848,7 +1865,15 @@ function leadArrivalTs(l){
   return (l.ts&&!isNaN(l.ts))?+l.ts:0;
 }
 function leadAgeMin(l){var t=leadArrivalTs(l);return t?((Date.now()-t)/60000):99999;}
+/* Closed/dead lead — agent ne Low Quantity / Location Issue / Not Interested
+   set kiya. Ye leads active lists se HAT jaate hain (panel mein nahi dikhte). */
+function isClosedLead(l){
+  var s=l.leadStatus||'';
+  return s==='Low Quantity'||s==='Location Issue'||s==='Not Interested';
+}
 function isPending(l){
+  /* Closed lead (Not Interested etc.) → pending se hatao */
+  if(isClosedLead(l))return false;
   /* Lead stays in pending list until marked Real or Fake */
   if(leadType(l)!=='new')return false; /* Real/Fake → remove from pending */
   return true; /* New lead = always pending, chahe dekha ho ya na ho */
@@ -2393,6 +2418,7 @@ function updateNavCounts(){
   defs.forEach(function(d){
     var el=$(d.id);if(!el)return;
     var n=LEADS.filter(function(l){
+      if(isClosedLead(l))return false; /* closed leads count mein nahi */
       if(caseOf(l)!==d.cs)return false;
       if(d.tab==='new')return leadType(l)==='new';
       if(d.tab==='real')return leadType(l)==='real';
@@ -2430,7 +2456,11 @@ function clearFilters(){
 }
 function leadTs(l){var t=l.ts||new Date(l.dateTime||l.createdAt).getTime();return isNaN(t)?0:t;}
 function tabLeads(){
-  var base=LEADS.filter(function(l){return caseOf(l)===state.case;});
+  /* Closed leads (Not Interested / Low Quantity / Location Issue) default lists
+     se hatao. LEKIN agar agent SEARCH kar raha hai to dikhao (taaki reopen/undo
+     kar sake). */
+  var searching=!!(state.search&&state.search.length);
+  var base=LEADS.filter(function(l){return caseOf(l)===state.case&&(searching||!isClosedLead(l));});
   if(state.tab==='new')return base.filter(function(l){return leadType(l)==='new';});
   if(state.tab==='real')return base.filter(function(l){return leadType(l)==='real';});
   if(!state.fFrom||!state.fTo)return null; /* fake data gated behind date range */
@@ -2734,6 +2764,7 @@ function renderNotifDetail(l){
         +(l.name&&l.name!==company?'<span>'+esc(l.name)+'</span>':'')
         +(l.waNumber?'<span>'+esc(l.waNumber)+'</span>':'')
         +'<span style="color:'+acol+';font-weight:700">'+ageLabel(a)+' ago</span>'
+        +'<span style="color:var(--mut)">\u00b7 '+esc(fmtDate(l.dateTime||l.createdAt||l.date))+'</span>'
       +'</div>'
       +'<div style="display:flex;gap:6px;margin-top:5px">'+ltChip+csChip+'</div>'
     +'</div>'
@@ -2799,6 +2830,7 @@ function renderNotifDetail(l){
         +'<div class="kv"><div class="flbl">Email</div><div class="fval">'+esc(l.email||'—')+'</div></div>'
         +'<div class="kv"><div class="flbl">Location</div><div class="fval">'+esc(l.location||'—')+'</div></div>'
         +'<div class="kv"><div class="flbl">Pincode</div><div class="fval">'+esc(l.pincode||'—')+'</div></div>'
+        +'<div class="kv"><div class="flbl">Date &amp; Time</div><div class="fval">'+esc(fmtDate(l.dateTime||l.createdAt||l.date))+'</div></div>'
         +(l.companyAddress?'<div class="kv" style="grid-column:1/-1"><div class="flbl">Company Address</div><div class="fval" style="font-size:13px">'+esc(l.companyAddress)+'</div></div>':'')
         +((l.department||l.designation)?'<div class="kv"><div class="flbl">Department</div><div class="fval">'+esc(l.department||'—')+'</div></div><div class="kv"><div class="flbl">Designation</div><div class="fval">'+esc(l.designation||'—')+'</div></div>':'')
       +'</div>'
@@ -2889,7 +2921,7 @@ function renderNotifDetail(l){
       +'<div class="ndv-avatar">'+esc(initial)+'</div>'
       +'<div class="ndv-meta">'
         +'<div class="ndv-name">'+esc(company)+'</div>'
-        +'<div class="ndv-sub"><span class="ndv-id">'+esc(id)+'</span>'+(l.waNumber?'<span>'+esc(l.waNumber)+'</span>':'')+'<span class="ndv-age" style="color:'+acol+'">'+ageLabel(a)+' ago</span></div>'
+        +'<div class="ndv-sub"><span class="ndv-id">'+esc(id)+'</span>'+(l.waNumber?'<span>'+esc(l.waNumber)+'</span>':'')+'<span class="ndv-age" style="color:'+acol+'">'+ageLabel(a)+' ago</span><span style="color:var(--mut)">\u00b7 '+esc(fmtDate(l.dateTime||l.createdAt||l.date))+'</span></div>'
         +'<div class="ndv-chips">'+ltChip+csChip+'</div>'
       +'</div>'
       +'<div class="ndv-acts"><button class="ndv-openrec" onclick="ndvOpenFull(\''+eid+'\')">'+'Full View ↗</button></div>'
@@ -3468,7 +3500,9 @@ function custHtml(l){
     }).join('');
     return '<div class="psec"><div class="pt">Customer Details<small>Bot data — correct if needed</small></div></div><div class="kvgrid edit">'+eb+'</div><div class="saverow"><button class="sv" onclick="saveCustomer(\''+esc(id)+'\')">Save changes</button><button class="cn" onclick="state.editCust=false;renderRecord()">Cancel</button></div>';
   }
-  var b=F.map(function(f){return '<div class="kv"><div class="flbl">'+esc(f.l)+'</div><div class="fval">'+esc(l[f.k]||'—')+'</div></div>';}).join('');
+  /* Date & Time row (lead kab aayi) — sabse pehle */
+  var dateRow='<div class="kv"><div class="flbl">Date &amp; Time</div><div class="fval">'+esc(fmtDate(l.dateTime||l.createdAt||l.date))+'</div></div>';
+  var b=dateRow+F.map(function(f){return '<div class="kv"><div class="flbl">'+esc(f.l)+'</div><div class="fval">'+esc(l[f.k]||'—')+'</div></div>';}).join('');
   var noteBlk='<div class="agnote"><div class="agnh"><span>📝 Agent Note</span><button class="mini" onclick="openNoteModal(\''+esc(id)+'\')">'+(l.agentNote?'✏️ Edit':'＋ Add')+'</button></div>'+(l.agentNote?('<div class="agnt">'+esc(l.agentNote)+'</div>'):'<div class="agnt empty">No notes yet — add call summary, follow-up reminders, etc.</div>')+'</div>';
   return '<div class="psec"><div class="pt">Customer Details<small>Bot data — edit if incorrect</small></div><button class="mini" onclick="state.editCust=true;renderRecord()">✏️ Edit</button></div><div class="kvgrid">'+b+'</div>'+noteBlk;
 }
@@ -4261,15 +4295,27 @@ function ptRunDiagnostics(){
 /* Test notification — local (jab sab OK ho) */
 function ptSendTestNotif(){
   if(Notification.permission!=='granted'){alert('Permission not granted!');return;}
-  var n=new Notification('Test Notification - Arion Lead',{
-    body: 'If you see this, notifications are working! They appear even when the tab is closed.',
-    icon: '/arion-icon.png',
-    tag: 'arion-test',
-    requireInteraction: true,
-    silent: true
-  });
-  n.onclick=function(){window.focus();n.close();showToast('Notification clicked!','Test successful',false);};
-  showToast('Test notification sent!','Check the corner of your screen',false);
+  /* Sample notification showing how a real new-lead notification looks */
+  var body=[
+    '\ud83c\udfe2 Sample Constructions Pvt Ltd',
+    '\ud83d\udccd Raipur, Chhattisgarh - 492001',
+    '\ud83d\udcde 919876543210',
+    '\ud83d\udce6 Scaffolding pipes 500 nos, cuplock',
+    '\ud83c\udff7\ufe0f Rental'
+  ].join('\n');
+  try{
+    var n=new Notification('\ud83d\udd14 ENQ-TEST \u00b7 Rajesh Kumar',{
+      body: body,
+      icon: ARION_ICON,
+      badge: ARION_ICON,
+      tag: 'arion-test-'+Date.now(),
+      requireInteraction: true,
+      silent: true
+    });
+    n.onclick=function(){window.focus();n.close();showToast('Notification clicked!','Test successful',false);};
+    setTimeout(function(){try{n.close();}catch(e){}},120000);
+  }catch(e){}
+  showToast('Test notification sent!','Check the corner of your screen. If it vanishes fast, set Chrome to "Alerts" in macOS Settings.',false);
 }
 </script>
 
