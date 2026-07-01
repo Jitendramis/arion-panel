@@ -2009,10 +2009,11 @@ function afterRoleValidated(){
      missing/false                -> normal login (no lockout risk) */
   fbDb.ref('/config/otp_enabled').once('value').then(function(s){
     var on = s.val()===true || s.val()==='true';
+    alert('OTP DIAGNOSTIC\n\nFlag value read: '+JSON.stringify(s.val())+'\nType: '+(typeof s.val())+'\nOTP will show: '+on+'\n\n(Agar ye alert dikh raha hai = NAYA code chal raha hai)');
     if(!on){ enterApp(); return; }
     _otpPending = { uid: state.uid, email: state.email };
     startOtpFlow();
-  }).catch(function(){ enterApp(); }); /* agar config read fail ho to block mat karo */
+  }).catch(function(e){ alert('OTP DIAGNOSTIC — config read FAILED:\n'+(e.message||e)+'\n\n(Rules ya connection issue)'); enterApp(); }); /* agar config read fail ho to block mat karo */
 }
 
 /* ── Show OTP screen + send code ── */
