@@ -1720,6 +1720,30 @@ hr{ border:none;border-top:1px solid var(--line);margin:14px 0 }
   </div>
 </div>
 
+<!-- OTP VERIFICATION -->
+<div id="otpscreen" class="hide">
+  <div class="lcard">
+    <div class="lhead"><div class="lmark">A</div><div class="lbrand">Arion<span>·</span>Lead</div></div>
+    <div class="lsub">Enter verification code</div>
+    <div style="font-size:13px;color:var(--mut);line-height:1.55;margin:2px 0 18px">
+      Humne aapke email <b id="otpEmail" style="color:var(--ink)">—</b> pe ek 6-digit code bheja hai. Neeche daalein.
+    </div>
+    <div class="lbl">Verification code</div>
+    <input id="otpCode" class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="000000"
+      style="text-align:center;font-size:26px;letter-spacing:10px;font-family:'JetBrains Mono',monospace;font-weight:700"
+      autocomplete="one-time-code" onkeydown="if(event.key==='Enter')doVerifyOtp()">
+    <button class="lbtn" id="otpBtn" onclick="doVerifyOtp()">Verify &amp; sign in</button>
+    <div class="lerr hide" id="otperr"></div>
+    <div class="lstat" id="otpstat" style="display:flex;justify-content:space-between;align-items:center">
+      <span id="otpResendTxt">Code nahi mila?</span>
+      <a id="otpResend" href="javascript:void(0)" onclick="doResendOtp()" style="color:var(--blue);font-weight:600;text-decoration:none">Resend code</a>
+    </div>
+    <div style="text-align:center;margin-top:14px">
+      <a href="javascript:void(0)" onclick="otpCancel()" style="color:var(--mut2);font-size:12px;text-decoration:none">← Use a different account</a>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app" class="hide">
   <div class="top">
@@ -1844,6 +1868,11 @@ hr{ border:none;border-top:1px solid var(--line);margin:14px 0 }
 var FB_CONFIG={apiKey:'AIzaSyAbCWguTxQLrQO4PPPgAQvzJB-SRaP5cnk',authDomain:'arion-bot-2d4e9.firebaseapp.com',projectId:'arion-bot-2d4e9',databaseURL:'https://arion-bot-2d4e9-default-rtdb.asia-southeast1.firebasedatabase.app',messagingSenderId:'184799044118',appId:'1:184799044118:web:269c6f5ddbc5a22593cb37'};
 /* TODO: Firebase Console > Project Settings > Cloud Messaging > Web Push > VAPID Key */
 var PUSH_VAPID_KEY='BEwtmB_EuehEoescQv_dlMsq9j2Gb_2kAxMAj_183w7r3__RZ2B_dC8zW7BI7Mf5MwmsOso7uw1hhXhTEakSEbk';
+/* GAS web app URL — login OTP emails ke liye. Ye wahi bot ka web app URL hai
+   jo "Anyone" access pe deployed hai. Agar OTP kaam na kare to yahan sahi
+   /exec URL daalein (Apps Script > Deploy > Web app > Anyone access). */
+var GAS_OTP_URL='https://script.google.com/macros/s/AKfycbztH9WvVdFE0cRgCf0zX87-ds0Upmw-_whWEZyj_qja7HTjuOkWuzQegJV4LMQ4s9LBLg/exec';
+var _otpPending=null; /* { uid, email } while awaiting OTP */
 var ARION_ICON='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAFnUlEQVR4nO2d308cVRTHvzP7i5+7dAssLLuLNCXS0FpIIWRL+WUtatWUElr/Bx999cX4N/jYxDefDGLaRk2NmgItFWM1VUJNIzTAUjdAS7HQlR/rQ4Phx+7OmZ07c2/D+byVPXPu5Xz2nrkzO1s0CGKoP5wWletloG8woYnIYynJQSt6NqzIMH0gFz03ZmXoZoK5+MaYrRHJFhc+PyirwXAFcPHzh1K7nAK4+NYxqmFWAVx8ceSqZUYBXHzxZKvpPgFcfPvIVFtT21BGPLsE8LvffvbWWM/2AmMfO2vNLUgyLEAyOsDtRwbbNecVIBkWIBmN249ceAVIhgVIhgVIhgVIhgVIhgVIhgVIhgVIxi17AhTKG+No/+QLcwel07jxQRyryRl7JiWIl2IFRHsumz9I0xDtviR+MoJRXoDLV4Rw/J28jo12DwCakGdobUN5AeH4ebgLivM6tjhUi8PH2gTPSCzKC4j1vG/xeLXbkNICCstrUN4Yt5QjHH8XLl+hoBmJR2kBsZ5Llnu4u7AE4bbzgmYkHqUFiNrFRF/PYxflEMoKCDa0orjqFSG5yo+fRmF5WEgu0SgrIEbc+2+mVg1jNE1HtGvA6pRsQUkBLm8BwqffI8Xe++xjUhxVqNMoKaC67W14ikoN4548+BUPv/scawsJw9ji6joEX20RMT2hKCkgSty7zw4PAek05ka/EprXSZQTUBCsQsVrHYZx6a1NzI68KPzszUFS7pr2C9A9PkvzE41yAqJdA9A042kt3BtF6kkSALA8PYGVmfuGx3iKSlHd9pblOYpEOQHUWwezw1/u+fcQMb9aJ2OlBByqb0ZJzVHDuK31FBJjX+/62V4h2ag42YmCYCiv+dmBUgKo9/0fjd/AxtrKrp+tJmewdP9nw2NVuyZQRoDu8SLSfoEUOzOc+aRLXQUqfVCjjICq1l54SgKGcev/LCP5y/cZX0uMXkV6c8MwR2mkHofqm8xO0RaUEUC975+4fQ1bG+sZX0s9XUTyt5ukPNFuNU7GSgjwlVWg8mQnKdaozVDbUORMH3SPlxRrJ0oIiHb2Q3MZP6CxtjiPhYmxnDHzd77BZmrNMJenJICq1l7yHO1CDQHEdjA3MgSkc3+dYTO1ivnxb0n5Ygq0IekCAkdOwF/bQIql3nKYI7ahyqYu+MoqSbF2IV0A9cp0ZfZPLE9PkGKTd3/EvyuPDeM0lxvRzouknHYh9StKusuNN6/chdcflDUFPH04iR8+PCttfKkrINRyTmrxAcBf24DAkRPSxpcqIKbIFanMG3TSBHj9QVSekrf0dxI50wedsA22A2kCIh390n7pvXj9QYRazkkZW5oA1R4ZlNUOpQjw1zYgUHdcxtBZqTx1Fj7/YcfHlSLA6gO3dqC73KjpcP6awPEmrLnciBB/0aXJcQx/1Gd5zDc+HUFxdZ1hXKznMv66fsXyeGZwfAWEmrvhK6sgxc7duipkTGqeQF0j/LXHhIxJxXEB5Pvw6TQSt68JGdNMHqfbo6MCPCUBVBG3e4uTP+H50t9Cxl2e+gPP5qdIsZHOi6Rb46JwVICZD0HmRsW0n22oq8AXKEeouUfo2LlwVAD1kj+d3sL82HWhY8/dorchJx9hdExAaaQeZUebSLGLE3fw/HFS6PjLU7/j2aNpUmxVSy+8JWVCx8+GYwLMPAqSELT72ZeX2IZ0t8exawL+L8skI/0TsYMOC5AMC5AMC5AMC5AMC5AMC5AMC5CMLuqvgjLm6RtMEL6OyNgKC5CMDoj748QMne2a8wqQDAuQzP8CuA05x85a69leYOxhb425BUlmnwBeBfaRqbYZVwBLEE+2mmZtQSxBHLlqmfMcwBKsY1RDw5MwS8gfSu1MFZcfYaFh5k1rahvKq8EYszWyVFBeES+w8sYU9o4+aDJEdYP/AEXpbkZHZVXWAAAAAElFTkSuQmCC';
 var fbDb=null,fbReady=false,leadsRef=null;
 var BRANCHES=[
@@ -1970,8 +1999,103 @@ function resolveRole(user){
       lerr('Branch "'+r.branch+'" not found. Valid IDs: '+ids+'. Fix the branch value in /panel_roles for this user.');
       firebase.auth().signOut();state.role=null;return;
     }
-    enterApp();
+    afterRoleValidated();
   }).catch(function(e){$('loginBtn').disabled=false;lerr('Role check error: '+(e.code||e.message));});
+}
+
+/* ── After role validated: check if login OTP is enabled ── */
+function afterRoleValidated(){
+  /* /config/otp_enabled = true  -> email OTP required
+     missing/false                -> normal login (no lockout risk) */
+  fbDb.ref('/config/otp_enabled').once('value').then(function(s){
+    var on = s.val()===true || s.val()==='true';
+    if(!on){ enterApp(); return; }
+    _otpPending = { uid: state.uid, email: state.email };
+    startOtpFlow();
+  }).catch(function(){ enterApp(); }); /* agar config read fail ho to block mat karo */
+}
+
+/* ── Show OTP screen + send code ── */
+function startOtpFlow(){
+  $('login').classList.add('hide');
+  $('otpscreen').classList.remove('hide');
+  $('otpEmail').textContent = _otpPending.email || '';
+  $('otpCode').value='';
+  $('otperr').classList.add('hide');
+  $('otpCode').focus();
+  sendLoginOtp();
+}
+
+function _otpGet_(params){
+  /* GAS web app ko GET call — response JSON milta hai */
+  var url = GAS_OTP_URL + '?' + params;
+  return fetch(url, { method:'GET', redirect:'follow' }).then(function(r){ return r.json(); });
+}
+
+function sendLoginOtp(){
+  if(!_otpPending) return;
+  $('otpResendTxt').textContent='Sending code…';
+  $('otpResend').style.pointerEvents='none';$('otpResend').style.opacity='.5';
+  _otpGet_('action=otp_send&uid='+encodeURIComponent(_otpPending.uid)+'&email='+encodeURIComponent(_otpPending.email))
+  .then(function(res){
+    if(res.ok){
+      $('otpResendTxt').textContent='Code sent to your email.';
+    } else if(res.error==='wait'){
+      $('otpResendTxt').textContent='Please wait '+(res.retryIn||30)+'s before resending.';
+    } else {
+      $('otpResendTxt').textContent='Could not send code ('+(res.error||'error')+').';
+    }
+    setTimeout(function(){ $('otpResend').style.pointerEvents='';$('otpResend').style.opacity=''; }, 3000);
+  })
+  .catch(function(e){
+    $('otpResendTxt').textContent='Network error — check connection.';
+    $('otpResend').style.pointerEvents='';$('otpResend').style.opacity='';
+  });
+}
+
+function doResendOtp(){ sendLoginOtp(); }
+
+function doVerifyOtp(){
+  $('otperr').classList.add('hide');
+  var code=($('otpCode').value||'').replace(/[^0-9]/g,'');
+  if(code.length!==6){ otpErr('Enter the 6-digit code.'); return; }
+  if(!_otpPending){ otpErr('Session expired. Sign in again.'); return; }
+  $('otpBtn').disabled=true;$('otpBtn').textContent='Verifying…';
+  _otpGet_('action=otp_verify&uid='+encodeURIComponent(_otpPending.uid)+'&code='+encodeURIComponent(code))
+  .then(function(res){
+    $('otpBtn').disabled=false;$('otpBtn').textContent='Verify & sign in';
+    if(res.ok){
+      $('otpscreen').classList.add('hide');
+      _otpPending=null;
+      enterApp();
+    } else if(res.error==='wrong'){
+      otpErr('Wrong code'+(typeof res.left==='number'?' — '+res.left+' attempts left.':'.'));
+    } else if(res.error==='expired'){
+      otpErr('Code expired. Tap Resend for a new code.');
+    } else if(res.error==='too_many'){
+      otpErr('Too many attempts. Tap Resend for a new code.');
+    } else if(res.error==='no_code'){
+      otpErr('No code found. Tap Resend.');
+    } else {
+      otpErr('Verification failed ('+(res.error||'error')+').');
+    }
+  })
+  .catch(function(e){
+    $('otpBtn').disabled=false;$('otpBtn').textContent='Verify & sign in';
+    otpErr('Network error — check connection.');
+  });
+}
+
+function otpErr(m){ var el=$('otperr'); el.textContent=m; el.classList.remove('hide'); }
+
+function otpCancel(){
+  _otpPending=null;
+  firebase.auth().signOut();
+  state.uid=null;state.role=null;state.branch=null;
+  $('otpscreen').classList.add('hide');
+  $('login').classList.remove('hide');
+  $('loginBtn').disabled=false;
+  $('pwd').value='';
 }
 
 /* Merge Firebase /config/branches into the local BRANCHES list. */
